@@ -23,9 +23,8 @@ export default function ModalContent() {
                     />
                 </div>
                 <div className='modal-right'>
-                    <p>リリース時期：{modalContent.release_date}</p>               
-                    <p>評価：{modalContent.vote_average}</p>
-                    <p>上映時間：{detail.runtime}</p>
+                    
+                    <p>上映時間：{detail.runtime}分</p>
                     <p>キャスト：{detailCast.cast && detailCast.cast.map (cast => cast.name).join(',')}</p>
                     <p>公式サイトURL：{detail.homepage}</p>
                     <p>ジャンル：{detail.genres && detail.genres.map(genre => genre.name).join(',')}</p>

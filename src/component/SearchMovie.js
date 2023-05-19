@@ -108,7 +108,9 @@ export default function SearchMovie(){
                                 alt={movie.title}
                             />
                             <strong>{movie.title}</strong>
-                            <p>{movie.overview}</p>
+                            <p>リリース：{movie.release_date.slice(0,4)}年</p>
+                            <p>評価：{movie.vote_average.toFixed(1)}</p>
+                            <p>{movie.overview.substring(0,60)}...</p>
                         </li>
                         ))}
                     </ul>

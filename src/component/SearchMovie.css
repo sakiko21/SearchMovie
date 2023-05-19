@@ -35,4 +35,6 @@ li.movie-card{
 }
 .movie-card img{
     width: 100%;
+    height:300px;
+    overflow: hidden;
 }
