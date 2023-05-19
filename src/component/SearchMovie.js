@@ -1,7 +1,9 @@
-import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 import React, {useState, useEffect, createContext, useContext} from 'react';
-
+import ModalContent from './ModalContent.js';
 export const ModalContext = createContext();
+//export const ModalContext = createContext({ modalVisible: false, showModal: () => {}, closeModal: () => {} });
+
+
 
 export default function SearchMovie(){
 
@@ -11,11 +13,11 @@ export default function SearchMovie(){
     const [pageNumber, setPageNumber] = useState(1);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState();
+    const [detail, setDetail] = useState("null");
+    const [detailCast, setDetailCast] = useState("null");
 
-    function getMovies() {
-        const apiKey = "2d251f526c17be62ed7f8c76426218f0";
-        const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${keyword}&page=${pageNumber}&language=ja-JP`;
-        fetch(url)
+    function getMovies() {  
+        fetch(`https://api.themoviedb.org/3/search/movie?api_key=2d251f526c17be62ed7f8c76426218f0&query=${keyword}&page=${pageNumber}&language=ja-JP`)
           .then(response => response.json())
           .then(json => {
             if (json.results && json.results.length >0) {
@@ -41,6 +43,7 @@ export default function SearchMovie(){
         
     }
     function showModal(content){
+        console.log('showModal called with content:', content);
         setModalContent(content);
         setModalVisible(true);
     }
@@ -48,14 +51,39 @@ export default function SearchMovie(){
     setModalVisible(false);
    }
 
+    function getDetail(id){
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=2d251f526c17be62ed7f8c76426218f0&language=ja-JP`)
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            setDetail(response);
+        })
+        .catch(err => console.error(err));
+   }
+   function getDetailCast(id){
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=2d251f526c17be62ed7f8c76426218f0/credits?language=ja-JP`)
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            setDetailCast(response);
+        })
+        .catch(err => console.error(err));
+   }
+
+
     useEffect(()=> {
         getMovies();  
     }, [pageNumber]);
     
+    useEffect(() => {
+        if (modalContent) {
+            setModalVisible(true);
+        }
+    }, [modalContent]);
 
     return (
     <>
-        <ModalContext.Provider value={{ modalVisible, showModal, closeModal }}>
+        <ModalContext.Provider value={{ modalVisible, showModal, closeModal, modalContent, detail,detailCast}}>
             <div className="container">
                 <div className="head">
                     <h2 className="title">映画検索アプリ</h2>
@@ -73,7 +101,8 @@ export default function SearchMovie(){
                     {error ? (<p>{error}</p>) : (
                     <ul className="movie-cards">
                         {Array.isArray(movies) && movies.map(movie =>(
-                        <li className="movie-card" key={movie.id} onClick={() => showModal(movie)}>
+                        <li className="movie-card" key={movie.id} onClick={() => {showModal(movie);getDetail(movie.id);}
+                        }>
                             <img 
                                 src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
                                 alt={movie.title}
@@ -92,23 +121,8 @@ export default function SearchMovie(){
             </div>
             
                 {modalVisible && 
-            <div className="modal-content">
-                <button className="close-modal" onClick={closeModal}>×</button>
-                <div className="modal-left">
-                    <img 
-                        src={`https://image.tmdb.org/t/p/w200/${modalContent.poster_path}`}
-                        alt={modalContent.title}
-                    />
-                </div>
-                <div className='modal-right'>
-                    <p>リリース時期：{modalContent.release_date}</p>               
-                    <p>評価：{modalContent.vote_average}</p>
-                </div>
-            </div>
-            
-            }
-            
-            
+                    <ModalContent />
+                }
         </ModalContext.Provider>
     </>
     );
