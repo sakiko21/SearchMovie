@@ -40,6 +40,7 @@ export default function SearchMovie(){
         setModalVisible(true);
         setModalContent(content);
         getDetail(content.id);
+        getDetailCast(content.id);
       }
    function closeModal(){
     setModalVisible(false);
@@ -56,7 +57,7 @@ export default function SearchMovie(){
        .catch(err => console.error(err));
   }
   function getDetailCast(id){
-       fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=2d251f526c17be62ed7f8c76426218f0/credits?language=ja-JP`)
+       fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=2d251f526c17be62ed7f8c76426218f0&language=ja-JP`)
        .then(response => response.json())
        .then(response => {
            console.log(response);
@@ -69,7 +70,7 @@ export default function SearchMovie(){
 
     useEffect(()=> {
         getMovies();  
-    }, [pageNumber]);
+    }, [getMovies, pageNumber]);
     
     
     return (

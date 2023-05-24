@@ -1,5 +1,6 @@
 .movie-detail-container{
     width: 350px;
+    margin:0 auto;
 }
 img {
     width: 100%;
