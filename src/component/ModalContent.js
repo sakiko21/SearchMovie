@@ -1,19 +1,44 @@
-import React, {useContext, useEffect} from 'react';
-import { ModalContext } from './SearchMovie';
-
+import React, {useState, useEffect} from 'react';
 
 export default function ModalContent() {
-    const { modalContent, closeModal,modalVisible, detail, detailCast} = useContext(ModalContext);
+
+    const [detail, setDetail] = useState("null");
+    const [detailCast, setDetailCast] = useState("null");
+    const [modalContent, setModalContent] = useState(null);
+   const [modalVisible, setModalVisible] = useState(false);
 
 
+    function getDetail(id){
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=2d251f526c17be62ed7f8c76426218f0&language=ja-JP`)
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            setDetail(response);
+        })
+        .catch(err => console.error(err));
+   }
+   function getDetailCast(id){
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=2d251f526c17be62ed7f8c76426218f0/credits?language=ja-JP`)
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            setDetailCast(response);
+        })
+        .catch(err => console.error(err));
+   }
+   function showModal(content){
+    setModalVisible(true);
+}
+   function closeModal(){
+    setModalVisible(false);
+   }
+    
     useEffect(()=> {
         console.log(`キャスト情報があるか：${detailCast}`);  
     }, []);
 
     return (
         <div className="modal">
-            {modalContent && (
-                <>
             <div className="modal-content">
                 <button className="close-modal" onClick={closeModal}>×</button>
                 <div className="modal-left">
@@ -32,9 +57,6 @@ export default function ModalContent() {
                 </div>
             </div>
 
-
-            </>
-            )}
         </div>
     );
 }

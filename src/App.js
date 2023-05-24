@@ -1,12 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
-import './component/SearchMovie.css';
-import SearchMovie from './component/SearchMovie';
+
+import {BrowserRouter} from 'react-router-dom';
+import {Router} from './Router'
+
 function App() {
   return (
-    
-      <SearchMovie />
-
+    <div className="App">
+      <BrowserRouter>
+        <Router/>
+      </BrowserRouter>
+    </div>
   );
 }
 
