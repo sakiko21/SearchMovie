@@ -70,3 +70,9 @@ li.movie-card{
   .modal-content{
     display: flex;
   }
+  .modal-left{
+    width: 35%;
+  }
+  .modal-right{
+    width: 55%;
+  }
