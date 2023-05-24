@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { Link } from "react-router-dom";
 import './SearchMovie.css';
 export default function SearchMovie(){
@@ -14,7 +14,7 @@ export default function SearchMovie(){
     
 
     //映画情報の検索
-    function getMovies() {  
+    const getMovies = useCallback(() => {  
         fetch(`https://api.themoviedb.org/3/search/movie?api_key=2d251f526c17be62ed7f8c76426218f0&query=${keyword}&page=${pageNumber}&language=ja-JP`)
           .then(response => response.json())
           .then(json => {
@@ -27,8 +27,11 @@ export default function SearchMovie(){
           }
         })
           .catch(error => console.log(error));
-    }
+    }, [keyword, pageNumber]);
     
+    useEffect(() => {
+        getMovies();
+    },[getMovies]);
 
     function putSearchButton(event) {
         if (event.key === 'Enter'){
