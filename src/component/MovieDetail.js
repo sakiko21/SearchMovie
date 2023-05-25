@@ -9,7 +9,7 @@ export function MovieDetail(){
         fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=2d251f526c17be62ed7f8c76426218f0&language=ja-JP`)
             .then(response => response.json())
             .then(data => setMovie(data));
-    })
+    }, [])
 
     return(
         <>

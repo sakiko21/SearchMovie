@@ -29,9 +29,7 @@ export default function SearchMovie(){
           .catch(error => console.log(error));
     }, [keyword, pageNumber]);
     
-    useEffect(() => {
-        getMovies();
-    },[getMovies]);
+  
 
     function putSearchButton(event) {
         if (event.key === 'Enter'){
@@ -70,11 +68,6 @@ export default function SearchMovie(){
   }
 
 
-
-    useEffect(()=> {
-        getMovies();  
-    }, [getMovies, pageNumber]);
-    
     
     return (
         <>     
